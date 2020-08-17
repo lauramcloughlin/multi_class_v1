@@ -3,7 +3,7 @@
 /* setting text size and page scroll */
 
 html{
-    font-size: 16px;
+    font-size: 12px;
     overflow-y: scroll;
 }
 
