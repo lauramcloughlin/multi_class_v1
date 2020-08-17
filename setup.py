@@ -29,5 +29,6 @@ setup(
         # Include any *.css files found in the 'css' subdirectory
         # of package:
         '': ['css/*.css'],
+        '': ['js/*.js'],
    }
 )
