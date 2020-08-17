@@ -269,6 +269,8 @@ class Misclass(object):
         data_matrix = calc_pos_count(data_matrix, 'adverbs')
         data_matrix = calc_pos_count(data_matrix, 'adjectives')
 
+        print("* 1 *")
+
         # Top POS Analysis table
         #ds_record_count = get_feature_statistics_count(data_matrix['label'], y, y_pred_label, labels)
         avg_nouns = get_feature_statistics_avg(data_matrix['nouns'], "nouns", y, y_pred_label, labels)
@@ -288,6 +290,7 @@ class Misclass(object):
         #  Joining Second POS Analysis table
         POS_df2 = pd.concat([ds_record_count2, avg_nouns2, avg_verbs2, avg_adverbs2, avg_adjectives2], axis=1)
 
+        print("* 2 *")
 
         #classifications = get_classifications(data_matrix['label'], y, y_pred_label, labels)
         #ds_record_count3 = get_feature_statistics_count3(data_matrix['label'], y, y_pred_label, labels,"record count")
@@ -305,12 +308,13 @@ class Misclass(object):
         # ************************************************************
         #all_token_count = build_token_count(all_word_count_matrix, "All")  # all features/tokens before any pre-processing
         #word_token_count = build_token_count(word_count_matrix, "All")
+        print("* 3 *")
         whole_ds_feature_analysis = build_whole_ds_feature_analysis(all_word_count_matrix, word_count_matrix, y, labels)
         title = "Feature Analysis"
 
         build_whole_class_token_counts_as_json(labels, word_count_matrix, y)
         class_feature_analysis = build_whole_class_feature_analysis(labels)
-
+        print("* 4 *")
         build_whole_class_token_counts_as_json2(labels, word_count_matrix, y, y_pred_label)
 
         # "feature_analysis_", "feature_analysis_True_", "feature_analysis_False", "feature_analysis_Misclassified_
@@ -318,7 +322,7 @@ class Misclass(object):
         false_feature_analysis = build_misclassified_feature_analysis(labels, data_matrix,"False", "")
         # misclassified_feature_analysis = build_misclassified_feature_analysis(labels, data_matrix, "Misclassified", "True")
         misclassified_feature_analysis = build_misclassified_feature_analysis(labels, data_matrix, "Misclassified", "")
-
+        print("* 5 *")
         #zero_token_count = build_token_count(word_count_matrix[(y == 0)], "Class Zero tokens")
         #one_token_count = build_token_count(word_count_matrix[(y == 1)], " Class One tokens")
         #tn_token_count = build_token_count(word_count_matrix[(y == 0) & (y_pred_label == 0)], "TN")
@@ -495,7 +499,7 @@ class Misclass(object):
         add_pos_to_colname(tfidf_matrix)
 
         build_tfidf_analysis(labels, tfidf_matrix, y, y_pred_label)
-
+        print("* 5 *")
         """
         # Filter tfidf matrix to classification group
         tn_tfidf_matrix = tfidf_matrix[(y == 0) & (y_pred_label == 0)]
