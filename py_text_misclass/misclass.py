@@ -141,9 +141,9 @@ class Misclass(object):
 
     def build(self, X, y, y_pred_label, word_count_matrix, tfidf_matrix, all_word_count_matrix, model_desc, path):
 
-        word_count_matrix.to_csv('data/word_count_matrix.csv')
-        tfidf_matrix.to_csv('data/tfidf_matrix.csv')
-        all_word_count_matrix.to_csv('data/all_word_count_matrix.csv')
+        #word_count_matrix.to_csv('data/word_count_matrix.csv')
+        #tfidf_matrix.to_csv('data/tfidf_matrix.csv')
+        #all_word_count_matrix.to_csv('data/all_word_count_matrix.csv')
 
         start_time = self.start_timer()
         self.initial_message()
@@ -299,7 +299,7 @@ class Misclass(object):
         avg_adverbs3 = get_feature_statistics_avg3(data_matrix['adverbs'], y, y_pred_label, labels,"adverbs")
         avg_adjectives3 = get_feature_statistics_avg3(data_matrix['adjectives'], y, y_pred_label, labels,"adjectives")
 
-        data_matrix.to_csv('data/data_matrix_multi.csv')
+        #data_matrix.to_csv('data/data_matrix_multi.csv')
 
         time_elapsed = self.end_timer(start_time)
 
