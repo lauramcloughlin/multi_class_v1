@@ -168,7 +168,7 @@ class Misclass(object):
         f1_score = self.get_f1_score(classification_report)
         misclassifications = self.get_misclassifications(data_matrix)
         create_image_directory()
-        create_data_directory,
+        create_data_directory()
 
         # Number of words
         # Number of chars
