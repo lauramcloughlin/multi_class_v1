@@ -62,6 +62,18 @@ def create_page(directory, pg_name, datafile,main_content):
 			  <li>
 			   	<a href="misclassified_feature_analysis.html"><h2><i class="fa fa-table"></i> Misclassified n Feature Analysis</h2></a>
 			  </li>
+			  <li>
+			   	<a href="tfidf_summary.html"><h2><i class="fa fa-bar-chart"></i> TFIDF Insights</h2></a>
+			  </li>
+			  <li>
+			   	<a href="misclassified_features.html"><h2><i class="fa fa-list-ul"></i> FN & FP Tokens </h2></a>
+			  </li>
+			  <li>
+			   	<a href="classification_analysis.html"><h2><i class="fa fa-cloud"></i> Tokens per Classification</h2></a>
+			  </li>
+			  <li>
+			   	<a href="class_label_analysis.html"><h2><i class="fa fa-columns"></i> Tokens per Class Label</h2></a>
+			  </li>
 	      </ul>
          </section>
      <!-- section 2 - main content -->
@@ -87,6 +99,12 @@ def create_page(directory, pg_name, datafile,main_content):
 def create_image_directory():
     # create image folder if it does not already exist
     filename = 'images'
+    if not os.path.exists(filename):
+        os.makedirs(filename)
+
+def create_data_directory():
+    # create image folder if it does not already exist
+    filename = 'data'
     if not os.path.exists(filename):
         os.makedirs(filename)
 

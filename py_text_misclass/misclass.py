@@ -20,8 +20,8 @@ from .page_content import build_index_content, build_statistics_content, build_p
 # build_misclassified_features_analysis_content, \
 # build_tfidf_summary_content, build_misclassified_features_content, build_classification_features_analysis_content, \
 # build_class_features_analysis_content
-from .build import create_directory, create_image_directory, create_page, open_website, copy_css, copy_js_folder, \
-    move_images
+from .build import create_directory, create_image_directory, create_data_directory, create_page, open_website, copy_css, \
+    copy_js_folder, move_images
 from .visualisations import build_top_tfidf_tokens_bar_chart
 
 
@@ -148,9 +148,9 @@ class Misclass(object):
 
     def build(self, X, y, y_pred_label, word_count_matrix, tfidf_matrix, all_word_count_matrix, model_desc, path):
 
-        #word_count_matrix.to_csv('data/word_count_matrix.csv')
-        #tfidf_matrix.to_csv('data/tfidf_matrix.csv')
-        #all_word_count_matrix.to_csv('data/all_word_count_matrix.csv')
+        # word_count_matrix.to_csv('data/word_count_matrix.csv')
+        # tfidf_matrix.to_csv('data/tfidf_matrix.csv')
+        # all_word_count_matrix.to_csv('data/all_word_count_matrix.csv')
 
         start_time = self.start_timer()
         self.initial_message()
@@ -167,6 +167,8 @@ class Misclass(object):
         misclassification_rate = self.get_misclassification_rate(y, y_pred_label)
         f1_score = self.get_f1_score(classification_report)
         misclassifications = self.get_misclassifications(data_matrix)
+        create_image_directory()
+        create_data_directory,
 
         # Number of words
         # Number of chars
@@ -315,7 +317,7 @@ class Misclass(object):
         avg_adverbs3 = get_feature_statistics_avg3(data_matrix['adverbs'], y, y_pred_label, labels, "adverbs")
         avg_adjectives3 = get_feature_statistics_avg3(data_matrix['adjectives'], y, y_pred_label, labels, "adjectives")
 
-        #data_matrix.to_csv('data/data_matrix_multi.csv')
+        # data_matrix.to_csv('data/data_matrix_multi.csv')
 
         time_elapsed = self.end_timer(start_time)
 
