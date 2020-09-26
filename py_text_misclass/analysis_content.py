@@ -9,6 +9,7 @@ from string import punctuation
 from spellchecker import SpellChecker
 from .visualisations import build_word_cloud, build_word_cloud2, build_single_top_tfidf_tokens_bar_chart
 
+
 # #######################################################################
 # Functions for Feature Statistics
 
@@ -17,50 +18,58 @@ def calc_sentence_count(df):
     df['sentences'] = df['text'].str.count(r'[?|!|.]+[ ]')
     return df
 
+
 # Word count of each instance and add count value to column of dataframe
 def calc_word_count(df):
     df['words'] = df['text'].str.split().map(len)
     return df
+
 
 # Unique word count of each instance and add count value to column of dataframe
 def calc_unique_words_count(df):
     # Split text into new series
     text_tokens = df['text'].str.lower().str.split()
     # Get number of unique words
-    #how does apply(set)work
+    # how does apply(set)work
     df['unique_tokens'] = text_tokens.apply(set).apply(len)
     return df
+
 
 # Char count of each instance and add count value to column of dataframe
 def calc_char_count(df):
     df['chars'] = df['text'].map(len)  # including spaces
     return df
 
+
 # Uppercase chars count of each instance and add count value to column of dataframe
 def calc_uppercase_char_count(df):
     df['uppercase'] = df['text'].str.count(r'[A-Z]')
     return df
+
 
 # Lovercase chars count of each instance and add count value to column of dataframe
 def calc_lowercase_char_count(df):
     df['lowercase'] = df['text'].str.count(r'[a-z]')
     return df
 
+
 # Numbers count of each instance and add count value to column of dataframe
 def calc_number_count(df):
     df['numbers'] = df['text'].str.count(r'[0-9]')
     return df
+
 
 # Non-alphanumeric chars count of each instance and add count value to column of dataframe
 def calc_non_alphanumeric_char_count(df):
     df['non_alphanumeric'] = df['text'].str.count(r'[^a-zA-Z0-9\_]')
     return df
 
+
 # Punctuation count of each instance and add count value to column of dataframe
 def calc_punctuation_count(df):
     # ???????????
     # check for many of the functions
-    #is this a data series or dataframe passed??
+    # is this a data series or dataframe passed??
     instance_tokens = []
     for index, row in df.iterrows():
         text = row['text'].lower()
@@ -68,14 +77,16 @@ def calc_punctuation_count(df):
         text = ''.join(tkn for tkn in text if tkn in punctuation)
         punctuation_count = len(text)
         instance_tokens.append((text, punctuation_count))
-    new_df = pd.DataFrame(instance_tokens, columns=['punctuations','punctuation'])
+    new_df = pd.DataFrame(instance_tokens, columns=['punctuations', 'punctuation'])
     df = pd.concat([df, new_df], axis=1)
     return df
+
 
 # Space count of each instance and add count value to column of dataframe
 def calc_space_count(df):
     df['space'] = df['text'].str.count(r'[ ]')
     return df
+
 
 # Function to identify and count the number of misspelt tokens in each instance
 # and adds columns to dataframe to hold this information
@@ -95,6 +106,7 @@ def calc_mispellings_count(df):
     new_df = pd.DataFrame(instance_tokens, columns=['tokens', 'misspelled', 'misspellings'])
     df = pd.concat([df, new_df], axis=1)
     return df
+
 
 # Function to identify the parts of speech of each word for each instance
 # and then count per part of speech
@@ -134,7 +146,7 @@ def get_classifications(dataframe_series, y, y_pred_label, labels):
     for index, value in labels.items():
         group_classification = []
         for index2, value2 in labels.items():
-            #avg = get_count(dataframe_series[(y == value) & (y_pred_label == value2)])
+            # avg = get_count(dataframe_series[(y == value) & (y_pred_label == value2)])
             if value == value2:
                 classification = "T" + str(value)
             elif value != value2:
@@ -147,13 +159,16 @@ def get_classifications(dataframe_series, y, y_pred_label, labels):
     df.name = "classification"
     return df
 
+
 def get_count(df_series):
     count = int(df_series.count())
     return count
 
+
 def get_sum(df_series):
     sum = df_series.sum()
     return sum
+
 
 # Sum specified column and divide by number of instances in dataframe
 # to get average word_count per instance
@@ -164,7 +179,6 @@ def get_feature_statistics_count(dataframe_series, y, y_pred_label, labels):
     all_averages.append(("Whole Dataset", all))
 
     for index, value in labels.items():
-
         avg = get_count(dataframe_series[(y == value)])
         classification = "Class " + str(value)
         all_averages.append((classification, avg))
@@ -184,9 +198,10 @@ def get_feature_statistics_count(dataframe_series, y, y_pred_label, labels):
         all_averages_df = pd.DataFrame(all_averages, columns=['label', 'count'])
         all_averages_df.set_index('label', inplace=True)
 
-        #all_averages_df = pd.Series(all_averages, name='count')
+        # all_averages_df = pd.Series(all_averages, name='count')
 
     return all_averages_df
+
 
 # Sum specified column and divide by number of instances in dataframe
 # to get average word_count per instance
@@ -219,9 +234,10 @@ def get_feature_statistics_count2(dataframe_series, y, y_pred_label, labels):
         all_averages_df = pd.DataFrame(all_averages, columns=['label', 'count'])
         all_averages_df.set_index('label', inplace=True)
 
-        #all_averages_df = pd.Series(all_averages, name='count')
+        # all_averages_df = pd.Series(all_averages, name='count')
 
     return all_averages_df
+
 
 # Sum specified column and divide by number of instances in dataframe
 # to get average word_count per instance
@@ -239,17 +255,16 @@ def get_feature_statistics_count3(dataframe_series, y, y_pred_label, labels, nam
     df.name = name
     return df
 
+
 def get_avg(df_series):
     column_total = df_series.sum()
-    avg = round(column_total / df_series.count(),3)
+    avg = round(column_total / df_series.count(), 3)
     return avg
-
 
 
 # Sum specified column and divide by number of instances in dataframe
 # to get average word_count per instance
 def get_feature_statistics_avg(dataframe_series, column_name, y, y_pred_label, labels):
-
     all_averages = []
 
     all = get_avg(dataframe_series)
@@ -272,21 +287,21 @@ def get_feature_statistics_avg(dataframe_series, column_name, y, y_pred_label, l
         classification3 = "Misclassified Class " + str(value)
         all_averages.append((classification3, avg4))
 
-        #for index2, value2 in labels.items():
-            #avg2 = get_avg(dataframe_series[(y == value)& (y_pred_label == value2)])
-            #classification = "T " + value + " F " + value2
-            #all_averages.append((classification, avg2))
+        # for index2, value2 in labels.items():
+        # avg2 = get_avg(dataframe_series[(y == value)& (y_pred_label == value2)])
+        # classification = "T " + value + " F " + value2
+        # all_averages.append((classification, avg2))
 
         all_averages_df = pd.DataFrame(all_averages, columns=['label', column_name])
         all_averages_df.set_index('label', inplace=True)
 
-        #all_averages_df = pd.Series(all_averages, name=column_name)
+        # all_averages_df = pd.Series(all_averages, name=column_name)
     return all_averages_df
+
 
 # Sum specified column and divide by number of instances in dataframe
 # to get average word_count per instance
 def get_feature_statistics_avg2(dataframe_series, column_name, y, y_pred_label, labels):
-
     all_averages = []
 
     all = get_avg(dataframe_series)
@@ -316,6 +331,7 @@ def get_feature_statistics_avg2(dataframe_series, column_name, y, y_pred_label, 
         all_averages_df.set_index('label', inplace=True)
 
     return all_averages_df
+
 
 # Sum specified column and divide by number of instances in dataframe
 # to get average word_count per instance
@@ -338,7 +354,6 @@ def get_feature_statistics_avg3(dataframe_series, y, y_pred_label, labels, name)
 # Functions for Feature Analysis
 
 def build_whole_ds_feature_analysis(df, df2, y, labels):
-
     df2_count = build_token_count(df2, "All")
     token_class_count = build_token_count_by_class(df, y, labels)
     print("token_class_count")
@@ -359,7 +374,7 @@ def build_whole_ds_feature_analysis(df, df2, y, labels):
             else:
                 total = int(feature_count)
 
-        rows +="""<span class="%s" title="%s">%s (%s), </span>"""%(font, per_token, key, total)
+        rows += """<span class="%s" title="%s">%s (%s), </span>""" % (font, per_token, key, total)
     table = rows
 
     return table
@@ -368,7 +383,7 @@ def build_whole_ds_feature_analysis(df, df2, y, labels):
 # Function to build dataframe of terms frequencies
 def build_token_count_by_class(df, y, labels):
     token_count = []
-    #df = pd.concat([df, y], axis=1)
+    # df = pd.concat([df, y], axis=1)
     df_new = pd.DataFrame()
     for col in df.columns:
         count = []
@@ -387,7 +402,8 @@ def build_token_count_by_class(df, y, labels):
 
     return df_new
 
-#zero_token_count = build_token_count(word_count_matrix[(y == 0)], "Class Zero tokens")
+
+# zero_token_count = build_token_count(word_count_matrix[(y == 0)], "Class Zero tokens")
 
 # Function to build dataframe of terms frequencies
 def build_token_count(df, label):
@@ -403,6 +419,7 @@ def build_token_count(df, label):
         token_count_df = token_count_df.sort_values(by='count', ascending=False)
         token_count_df.label = label
     return token_count_df
+
 
 # Function to build dataframe of terms frequencies
 def build_token_count_with_POS(df, label):
@@ -435,11 +452,10 @@ def build_token_count_with_POS(df, label):
         token_count_df.label = label
     return token_count_df
 
+
 # First find the shared tokens by comparing tokens in one dataframe to tokens of another
 def build_whole_class_token_counts_as_json(labels, df, y):
-
     for index, value in labels.items():
-
         token_list_df = build_token_count_with_POS(df[(y == value)], value)
         token_list_df.name = value
         print("token_list_df")
@@ -451,15 +467,15 @@ def build_whole_class_token_counts_as_json(labels, df, y):
 
         path = "data/feature_analysis_" + str(value) + ".json"
 
-        token_list_df.to_json(path, orient='records') #, orient='index'
+        token_list_df.to_json(path, orient='records')  # , orient='index'
         del [[token_list_df]]
         gc.collect()
 
-        #class_features.append((value, token_list_df))
+        # class_features.append((value, token_list_df))
+
 
 # First find the shared tokens by comparing tokens in one dataframe to tokens of another
 def build_whole_class_token_counts_as_json2(labels, df, y, y_pred_label):
-
     for index, value in labels.items():
         label = "True_" + str(value)
         token_list_df = build_token_count_with_POS(df[(y == value) & (y_pred_label == value)], label)
@@ -467,8 +483,8 @@ def build_whole_class_token_counts_as_json2(labels, df, y, y_pred_label):
         print("token_list_df")
         print(token_list_df)
         print(type(token_list_df))
-        #file_name = label
-        #build_word_cloud2(token_list_df, file_name, 300, 60)
+        # file_name = label
+        # build_word_cloud2(token_list_df, file_name, 300, 60)
         path = "data/feature_analysis_" + label + ".json"
         token_list_df.to_json(path, orient='records')
         del [[token_list_df]]
@@ -481,8 +497,8 @@ def build_whole_class_token_counts_as_json2(labels, df, y, y_pred_label):
         print("token_list_df")
         print(token_list_df)
         print(type(token_list_df))
-        #file_name = label
-        #build_word_cloud2(token_list_df, file_name, 300, 60)
+        # file_name = label
+        # build_word_cloud2(token_list_df, file_name, 300, 60)
         path = "data/feature_analysis_" + label + ".json"
         token_list_df.to_json(path, orient='records')
         del [[token_list_df]]
@@ -495,25 +511,24 @@ def build_whole_class_token_counts_as_json2(labels, df, y, y_pred_label):
         print("token_list_df")
         print(token_list_df)
         print(type(token_list_df))
-        #file_name = label
-        #build_word_cloud2(token_list_df, file_name, 300, 60)
+        # file_name = label
+        # build_word_cloud2(token_list_df, file_name, 300, 60)
         path = "data/feature_analysis_" + str(label) + ".json"
-        token_list_df.to_json(path, orient='records') #, orient='index'
+        token_list_df.to_json(path, orient='records')  # , orient='index'
 
         del [[token_list_df]]
         gc.collect()
 
-    #DELETE DATAFRAMEs
-        #class_features.append((value, token_list_df))
+    # DELETE DATAFRAMEs
+    # class_features.append((value, token_list_df))
 
 
 def build_whole_class_feature_analysis(labels):
-
     tag1 = """<table>"""
 
     complete_tag = ""
-#  <div id="div1" class="linked-div" style="display: none">&nbsp;One</div>
-# <table class="table_alternate_colour" id="%s" style="display:none">
+    #  <div id="div1" class="linked-div" style="display: none">&nbsp;One</div>
+    # <table class="table_alternate_colour" id="%s" style="display:none">
     for index, value in labels.items():
 
         path = "data/feature_analysis_" + str(value) + ".json"
@@ -537,7 +552,7 @@ def build_whole_class_feature_analysis(labels):
             </td>
          </tr>
              <tr>
-               <td>"""%(str(value), str(value), str(value), str(value))
+               <td>""" % (str(value), str(value), str(value), str(value))
 
         rows = ""
 
@@ -566,9 +581,9 @@ def build_whole_class_feature_analysis(labels):
 
     return table
 
+
 # First find the shared tokens by comparing tokens in one dataframe to tokens of another
 def build_feature_analysis(labels, df, y):
-
     class_features = []
 
     for index, value in labels.items():
@@ -581,7 +596,6 @@ def build_feature_analysis(labels, df, y):
     print("class_features")
     print(class_features)
     return class_features
-
 
 
 # #######################################################################
@@ -617,23 +631,25 @@ def top_tfidf_tokens(df, pos, label):
 
     return top_tfidf_df
 
-def build_top_tfidf(tn_tfidf_matrix, tp_tfidf_matrix, fn_tfidf_matrix, fp_tfidf_matrix, pos):
 
-    tn_top_tfidf_tokens_pos = top_tfidf_tokens(tn_tfidf_matrix,pos)
+def build_top_tfidf(tn_tfidf_matrix, tp_tfidf_matrix, fn_tfidf_matrix, fp_tfidf_matrix, pos):
+    tn_top_tfidf_tokens_pos = top_tfidf_tokens(tn_tfidf_matrix, pos)
     tn_top_tfidf_tokens_pos.label = "True Negatives"
-    tp_top_tfidf_tokens_pos = top_tfidf_tokens(tp_tfidf_matrix,pos)
+    tp_top_tfidf_tokens_pos = top_tfidf_tokens(tp_tfidf_matrix, pos)
     tp_top_tfidf_tokens_pos.label = "True Positives"
-    fn_top_tfidf_tokens_pos = top_tfidf_tokens(fn_tfidf_matrix,pos)
+    fn_top_tfidf_tokens_pos = top_tfidf_tokens(fn_tfidf_matrix, pos)
     fn_top_tfidf_tokens_pos.label = "False Negatives "
-    fp_top_tfidf_tokens_pos = top_tfidf_tokens(fp_tfidf_matrix,pos)
+    fp_top_tfidf_tokens_pos = top_tfidf_tokens(fp_tfidf_matrix, pos)
     fp_top_tfidf_tokens_pos.label = "False Positives"
 
-    tfidf_by_pos_lists = build_list(tn_top_tfidf_tokens_pos, tp_top_tfidf_tokens_pos, fn_top_tfidf_tokens_pos, fp_top_tfidf_tokens_pos)
+    tfidf_by_pos_lists = build_list(tn_top_tfidf_tokens_pos, tp_top_tfidf_tokens_pos, fn_top_tfidf_tokens_pos,
+                                    fp_top_tfidf_tokens_pos)
 
     del [[tn_tfidf_matrix, tp_tfidf_matrix, fn_tfidf_matrix, fp_tfidf_matrix]]
     gc.collect()
 
     return tfidf_by_pos_lists
+
 
 def build_tfidf_analysis(labels, data_matrix, y, y_pred_label):
     for index, value in labels.items():
@@ -643,17 +659,17 @@ def build_tfidf_analysis(labels, data_matrix, y, y_pred_label):
         # Call function to build the top average tfidf values for each classification group for each part of speech
         tfidf_by_pos_all = top_tfidf_tokens(df, 'all', label)
 
-        #tfidf_by_pos_nouns = top_tfidf_tokens(df, 'nouns')
-        #tfidf_by_pos_verbs = top_tfidf_tokens(df, 'verbs')
-        #tfidf_by_pos_adjs = top_tfidf_tokens(df, 'adjectives')
-        #tfidf_by_pos_advs = top_tfidf_tokens(df, 'adverbs')
+        # tfidf_by_pos_nouns = top_tfidf_tokens(df, 'nouns')
+        # tfidf_by_pos_verbs = top_tfidf_tokens(df, 'verbs')
+        # tfidf_by_pos_adjs = top_tfidf_tokens(df, 'adjectives')
+        # tfidf_by_pos_advs = top_tfidf_tokens(df, 'adverbs')
 
         # Plot top 50 tfidf value words results of each group for comparison
         build_single_top_tfidf_tokens_bar_chart(tfidf_by_pos_all, label)
-        #build_single_top_tfidf_tokens_bar_chart(tfidf_by_pos_nouns, "nouns")
-        #build_single_top_tfidf_tokens_bar_chart(tfidf_by_pos_verbs, "verbs")
-        #build_single_top_tfidf_tokens_bar_chart(tfidf_by_pos_adjs, "adjs")
-        #build_single_top_tfidf_tokens_bar_chart(tfidf_by_pos_advs, "advs")
+        # build_single_top_tfidf_tokens_bar_chart(tfidf_by_pos_nouns, "nouns")
+        # build_single_top_tfidf_tokens_bar_chart(tfidf_by_pos_verbs, "verbs")
+        # build_single_top_tfidf_tokens_bar_chart(tfidf_by_pos_adjs, "adjs")
+        # build_single_top_tfidf_tokens_bar_chart(tfidf_by_pos_advs, "advs")
 
         del [[df]]
         gc.collect()
@@ -674,14 +690,13 @@ def build_tfidf_analysis(labels, data_matrix, y, y_pred_label):
         del [[df3]]
         gc.collect()
 
-        #Per Misclassifed
+        # Per Misclassifed
         df4 = data_matrix[(y == value) & (y_pred_label != value)]
         label = 'all_misclassified_' + value
         tfidf_by_pos_all4 = top_tfidf_tokens(df4, 'all', label)
         build_single_top_tfidf_tokens_bar_chart(tfidf_by_pos_all4, label)
         del [[df4]]
         gc.collect()
-
 
 
 def add_pos_to_colname(df):
@@ -692,7 +707,8 @@ def add_pos_to_colname(df):
         pos_list.append(x + "-" + y)
     df.columns = [pos_list]
 
-def build_list(df,df2,df3,df4):
+
+def build_list(df, df2, df3, df4):
     df_list = list()
     df_list.append(df)
     df_list.append(df2)
@@ -700,8 +716,8 @@ def build_list(df,df2,df3,df4):
     df_list.append(df4)
     return df_list
 
-def build_misclassified_feature_analysis(labels, data_matrix, feature_group1, feature_group2):
 
+def build_misclassified_feature_analysis(labels, data_matrix, feature_group1, feature_group2):
     tag1 = """<table>"""
     complete_tag = ""
 
@@ -714,6 +730,9 @@ def build_misclassified_feature_analysis(labels, data_matrix, feature_group1, fe
 
         data_df = pd.DataFrame.from_dict(data, orient='columns')
 
+        print("data_df")
+        print(data_df)
+
         # For class
         path2 = "data/feature_analysis_" + str(value) + ".json"
         # For true class
@@ -723,6 +742,9 @@ def build_misclassified_feature_analysis(labels, data_matrix, feature_group1, fe
         with open(path2) as json_file:
             data2 = json.load(json_file)
         data2_df = pd.DataFrame.from_dict(data2, orient='columns')
+
+        print("data2_df")
+        print(data2_df)
 
         if data_df.empty:
 
@@ -746,9 +768,9 @@ def build_misclassified_feature_analysis(labels, data_matrix, feature_group1, fe
       </table> 
                  </td>
                 </tr>
-    
+
                     </div>
-                    """% (str(value), str(feature_group1), str(value), str(feature_group1).upper(), str(value).upper())
+                    """ % (str(value), str(feature_group1), str(value), str(feature_group1).upper(), str(value).upper())
             complete_tag += tag2
 
         else:
@@ -770,28 +792,38 @@ def build_misclassified_feature_analysis(labels, data_matrix, feature_group1, fe
 
             shared_tokens2 = data2_df[data2_df['token_name'].isin(data_df['token_name'])]
             shared_tokens2 = shared_tokens2.sort_values(by='token_name')
+            shared_tokens2.rename(columns={'count': 'count_2'}, inplace=True)
             print("shared_tokens2")
             print(shared_tokens2)
 
-            shared_tokens = pd.concat([shared_tokens1.reset_index(drop=True), shared_tokens2.reset_index(drop=True)], axis=1)
+            # shared_tokens = pd.concat([shared_tokens1.reset_index(drop=True), shared_tokens2.reset_index(drop=True)], axis=1)
+            # print("shared_tokens after concat")
+            # print(shared_tokens)
+            # shared_tokens.columns = ['count_1', 'pos','token_name', 'count_2', 'pos_2', 'token_name_2']
+            # print("shared_tokens after column rename")
+            # print(shared_tokens)
+            # shared_tokens = shared_tokens.drop('token_name_2', 1)
+            # shared_tokens = shared_tokens.drop('pos_2', 1)
+            # print("shared_tokens after columns dropped")
+            # print(shared_tokens)
+
+            shared_tokens2_count = shared_tokens2["count_2"]
+            print("shared_tokens2_count")
+            print(type(shared_tokens2_count))
+            print(shared_tokens2_count)
+            shared_tokens = pd.concat(
+                [shared_tokens1.reset_index(drop=True), shared_tokens2_count.reset_index(drop=True)], axis=1)
             print("shared_tokens after concat")
             print(shared_tokens)
-            shared_tokens.columns = ['count_1', 'pos','token_name', 'count_2', 'pos_2', 'token_name_2']
-            print("shared_tokens after column rename")
-            print(shared_tokens)
-            shared_tokens = shared_tokens.drop('token_name_2', 1)
-            shared_tokens = shared_tokens.drop('pos_2', 1)
-            print("shared_tokens after columns dropped")
-            print(shared_tokens)
-            shared_tokens = shared_tokens.sort_values(by='count_1', ascending=False)
+            shared_tokens = shared_tokens.sort_values(by='count', ascending=False)
 
             # Next find the unique terms by checking tokens of dataframe do not appear
             # in the previously identified shared terms dataframe
             unique_tokens_1 = data_df[~data_df['token_name'].isin(shared_tokens['token_name'])]
             unique_tokens_2 = data2_df[~data2_df['token_name'].isin(shared_tokens['token_name'])]
 
-            file_name1 = "unique_" + feature_group1 + "_" + value
-            file_name2 = feature_group1 + "_unique_class_" + value
+            file_name1 = "unique_" + str(feature_group1) + "_" + value
+            file_name2 = str(feature_group1) + "_unique_class_" + value
             file_name3 = "shared_" + feature_group1 + "_and_class_" + value
 
             tfidf_file_name1 = "tfidf_all_" + feature_group1 + "_" + value + "_barchart"
@@ -799,7 +831,8 @@ def build_misclassified_feature_analysis(labels, data_matrix, feature_group1, fe
 
             build_word_cloud2(unique_tokens_1, file_name1, 300, 60)
             build_word_cloud2(unique_tokens_2, file_name2, 300, 60)
-            build_word_cloud2(shared_tokens, file_name3, 300, 60)
+            # build_word_cloud2(shared_tokens, file_name3, 300, 60)
+            build_word_cloud2(shared_tokens1, file_name3, 300, 60)
 
             print("shared_tokens")
             print(shared_tokens)
@@ -822,7 +855,7 @@ def build_misclassified_feature_analysis(labels, data_matrix, feature_group1, fe
      %s %s Feature Analysis 
       </th>
       </tr>
-      
+
             <tr>
       <td>
      <table class="features">
@@ -859,7 +892,11 @@ def build_misclassified_feature_analysis(labels, data_matrix, feature_group1, fe
                  </td>
                 </tr>  
                     </div>    
-                    """%(str(value), str(feature_group1), str(value), str(feature_group1), str(value), str(feature_group1), str(value), str(feature_group1), str(value), str(value), str(value), file_name1, class0_unique_tokens, file_name3, common_tokens, file_name2, class1_unique_tokens, tfidf_file_name1, tfidf_file_name2, misclassifications_table)
+                    """ % (
+            str(value), str(feature_group1), str(value), str(feature_group1), str(value), str(feature_group1),
+            str(value), str(feature_group1), str(value), str(value), str(value), file_name1, class0_unique_tokens,
+            file_name3, common_tokens, file_name2, class1_unique_tokens, tfidf_file_name1, tfidf_file_name2,
+            misclassifications_table)
             complete_tag += tag2
 
     tag4 = """</table>"""
@@ -889,8 +926,8 @@ def build_feature_analysis_binary(df1, df2):
 
     return shared_tokens, unique_tokens_1, unique_tokens_2
 
-def build_feature_analysis_word_clouds(df, df_name, df2, df2_name, df3, df3_name):
 
+def build_feature_analysis_word_clouds(df, df_name, df2, df2_name, df3, df3_name):
     build_word_cloud(df2, df2_name, 300, 60)
     build_word_cloud(df, df_name, 300, 60)
     build_word_cloud(df3, df3_name, 300, 60)
@@ -911,11 +948,12 @@ def build_content_dataframe_to_string2(df):
     rows = []
     for index, row in df.iterrows():
         token = row['token_name']
-        count1 = row['count_1']
+        count1 = row['count']
         count2 = row['count_2']
         rows.append("""%s(%s, %s) """ % (token, count1, count2))
     result = ''.join(rows)
     return result
+
 
 def build_misclassifications_list(feature_group1, misclassifications, value):
     tag1 = """<br><table class="table_alternate_colour">"""
@@ -929,7 +967,7 @@ def build_misclassifications_list(feature_group1, misclassifications, value):
         true_label = row['label']
         pred_label = row['pred_label']
 
-        rows +="""<tr>
+        rows += """<tr>
                         <td>Label %s</td>
                         <td>False %s</td>
                         <td>%s</td>
@@ -938,6 +976,7 @@ def build_misclassifications_list(feature_group1, misclassifications, value):
     tag3 = """</table>"""
     table = tag1 + rows + tag3
     return table
+
 
 """
 # Sum word_count column and divide by number of instances in dataframe
